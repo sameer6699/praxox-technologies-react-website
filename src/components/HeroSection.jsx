@@ -5,6 +5,31 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const ANIMATION_DURATION = 800; // Increased for smoother animation
 
+// Typewriter Text Component
+const TypewriterText = ({ text, speed = 100, className = "" }) => {
+  const [displayText, setDisplayText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(true);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timer = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, speed);
+      return () => clearTimeout(timer);
+    } else {
+      setIsTyping(false);
+    }
+  }, [currentIndex, text, speed]);
+
+  return (
+    <h1 className={`${className} ${isTyping ? 'typing-cursor' : ''}`}>
+      {displayText}
+    </h1>
+  );
+};
+
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -306,12 +331,21 @@ const HeroSection = () => {
           animation: pulse-glow 3s ease-in-out infinite;
           will-change: transform;
         }
+        /* Typing cursor animation */
+        .typing-cursor::after {
+          content: '|';
+          animation: blink 1s infinite;
+          color: #f97316;
+          font-weight: bold;
+        }
+        @keyframes blink {
+          0%, 50% { opacity: 1; }
+          51%, 100% { opacity: 0; }
+        }
       `}</style>
       {/* Heading with enhanced animation */}
-      <div className="w-full pt-8 mb-8 px-4">
-        <h1 className="text-left text-4xl md:text-7xl lg:text-8xl font-bold text-orange-500 leading-tight transition-all duration-700 hover:scale-105">
-          Technology that matters.
-        </h1>
+      <div className="w-full pt-0 mb-8 px-4">
+        <TypewriterText text="Technology that matters." speed={100} className="text-left text-4xl md:text-7xl lg:text-8xl font-bold text-orange-500 leading-tight transition-all duration-700 hover:scale-105" />
       </div>
       {/* Animated Cards */}
       <div className="hero-anim-wrapper relative">
@@ -321,8 +355,8 @@ const HeroSection = () => {
         <div className={getCardClass('main')}>
           {renderCard(getCurrentCard(), true)}
         </div>
-        {/* Right-side Navigation Controls */}
-        <div className="absolute flex flex-row gap-4 z-20 bottom-8" style={{top: 'unset', right: '-2.5rem'}}>
+        {/* Arrow Buttons Outside Card, Vertically Centered */}
+        <div className="absolute flex flex-row gap-4 z-30" style={{top: '50%', right: '-6rem', transform: 'translateY(-50%)', alignItems: 'center'}}>
           <button 
             onClick={handlePrev}
             disabled={isTransitioning}
@@ -365,7 +399,7 @@ const HeroSection = () => {
   function renderCard(card, isMain) {
     return (
       <div
-        className={`hero-card bg-white rounded-2xl shadow-2xl p-12 flex flex-col h-full w-full transition-all duration-700 ease-out`}
+        className={`hero-card bg-white rounded-2xl shadow-2xl p-4 flex flex-col h-full w-full transition-all duration-700 ease-out`}
         style={{
           background: `linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.98))`,
           backdropFilter: 'blur(10px)',
@@ -393,7 +427,7 @@ const HeroSection = () => {
           )}
         </div>
         {/* Enhanced Media Container */}
-        <div className="relative flex-1 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="relative flex-1 min-h-[260px] md:min-h-[340px] lg:min-h-[420px] rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
           {card.type === "video" ? (
             <video
               autoPlay
