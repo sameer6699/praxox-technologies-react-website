@@ -6,25 +6,45 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const ANIMATION_DURATION = 800; // Increased for smoother animation
 
 // Typewriter Text Component
-const TypewriterText = ({ text, speed = 100, className = "" }) => {
+const TypewriterText = ({ text, speed = 100, className = "", loop = true }) => {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    if (currentIndex < text.length) {
+    if (!isDeleting && currentIndex < text.length) {
+      // Typing phase
       const timer = setTimeout(() => {
         setDisplayText(prev => prev + text[currentIndex]);
         setCurrentIndex(prev => prev + 1);
       }, speed);
       return () => clearTimeout(timer);
-    } else {
-      setIsTyping(false);
+    } else if (!isDeleting && currentIndex >= text.length) {
+      // Finished typing, wait a bit then start deleting
+      const timer = setTimeout(() => {
+        setIsDeleting(true);
+      }, 2000); // Wait 2 seconds before starting to delete
+      return () => clearTimeout(timer);
+    } else if (isDeleting && displayText.length > 0) {
+      // Deleting phase
+      const timer = setTimeout(() => {
+        setDisplayText(prev => prev.slice(0, -1));
+      }, speed / 2); // Delete faster than typing
+      return () => clearTimeout(timer);
+    } else if (isDeleting && displayText.length === 0) {
+      // Finished deleting, reset for next loop
+      const timer = setTimeout(() => {
+        setCurrentIndex(0);
+        setIsDeleting(false);
+        setIsTyping(true);
+      }, 1000); // Wait 1 second before starting next loop
+      return () => clearTimeout(timer);
     }
-  }, [currentIndex, text, speed]);
+  }, [currentIndex, text, speed, isDeleting, displayText, loop]);
 
   return (
-    <h1 className={`${className} ${isTyping ? 'typing-cursor' : ''}`}>
+    <h1 className={`${className} typing-cursor`}>
       {displayText}
     </h1>
   );
@@ -342,10 +362,42 @@ const HeroSection = () => {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0; }
         }
+        /* Fixed heading container to prevent layout shifts */
+        .heading-container {
+          min-height: 120px;
+          width: 100%;
+          position: relative;
+        }
+        .typing-text-container {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: flex-start;
+        }
+        @media (min-width: 768px) {
+          .heading-container {
+            min-height: 140px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .heading-container {
+            min-height: 160px;
+          }
+        }
+        @media (min-width: 1536px) {
+          .heading-container {
+            min-height: 180px;
+          }
+        }
       `}</style>
-      {/* Heading with enhanced animation */}
-      <div className="w-full pt-0 mb-8 px-4">
-        <TypewriterText text="Technology that matters." speed={100} className="text-left text-4xl md:text-7xl lg:text-8xl font-bold text-orange-500 leading-tight transition-all duration-700 hover:scale-105" />
+      {/* Heading with enhanced animation - Fixed height container */}
+      <div className="w-full pt-0 mb-8 px-4 heading-container">
+        <div className="typing-text-container">
+          <TypewriterText text="Technology that matters." speed={100} className="text-left text-4xl md:text-7xl lg:text-8xl font-bold text-orange-500 leading-tight transition-all duration-700 hover:scale-105" />
+        </div>
       </div>
       {/* Animated Cards */}
       <div className="hero-anim-wrapper relative">
