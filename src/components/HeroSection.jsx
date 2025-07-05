@@ -1,14 +1,56 @@
 import video1 from "../assets/video1.mp4";
 import video2 from "../assets/video2.mp4";
+import { useState, useEffect } from "react";
+
+const TypewriterText = ({ text, speed = 100 }) => {
+  const [displayText, setDisplayText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    if (!isDeleting && currentIndex < text.length) {
+      // Typing phase
+      const timeout = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, speed);
+
+      return () => clearTimeout(timeout);
+    } else if (!isDeleting && currentIndex === text.length) {
+      // Pause at the end before deleting
+      const timeout = setTimeout(() => {
+        setIsDeleting(true);
+      }, 2000); // Wait 2 seconds before starting to delete
+
+      return () => clearTimeout(timeout);
+    } else if (isDeleting && displayText.length > 0) {
+      // Deleting phase
+      const timeout = setTimeout(() => {
+        setDisplayText(prev => prev.slice(0, -1));
+      }, speed / 2); // Delete faster than typing
+
+      return () => clearTimeout(timeout);
+    } else if (isDeleting && displayText.length === 0) {
+      // Reset for next cycle
+      setIsDeleting(false);
+      setCurrentIndex(0);
+    }
+  }, [currentIndex, text, speed, isDeleting, displayText]);
+
+  return (
+    <span className="bg-gradient-to-r from-orange-500 to-red-800 text-transparent bg-clip-text">
+      {displayText}
+      <span className="animate-pulse">|</span>
+    </span>
+  );
+};
 
 const HeroSection = () => {
   return (
     <div className="flex flex-col items-center mt-6 lg:mt-20">
       <h1 className="text-4xl sm:text-6xl lg:text-7xl text-center tracking-wide">
         <div>Praxox Technologies</div>
-        <span className="bg-gradient-to-r from-orange-500 to-red-800 text-transparent bg-clip-text">
-          for developers
-        </span>
+        <TypewriterText text="Your Vision, Our Tech." speed={150} />
       </h1>
       <p className="mt-10 text-lg text-center text-neutral-500 max-w-4xl">
         Empower your creativity and bring your VR app ideas to life with our
