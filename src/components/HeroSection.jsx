@@ -53,19 +53,19 @@ const HeroSection = () => {
         <TypewriterText text="Your Vision, Our Tech." speed={150} />
       </h1>
       <p className="mt-10 text-lg text-center text-neutral-500 max-w-4xl">
-        Empower your creativity and bring your VR app ideas to life with our
-        intuitive development tools. Get started today and turn your imagination
-        into immersive reality!
+        We are a leading technology company specializing in custom software development, 
+        digital transformation, and innovative solutions. Transform your business with 
+        cutting-edge technology tailored to your unique needs.
       </p>
       <div className="flex justify-center my-10">
         <a
           href="#"
           className="bg-gradient-to-r from-orange-500 to-orange-800 py-3 px-4 mx-3 rounded-md"
         >
-          Start for free
+          Get Started
         </a>
         <a href="#" className="py-3 px-4 mx-3 rounded-md border">
-          Documentation
+          View Projects
         </a>
       </div>
       <div className="flex mt-10 justify-center">

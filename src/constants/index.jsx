@@ -13,168 +13,167 @@ import user5 from "../assets/profile-pictures/user5.jpg";
 import user6 from "../assets/profile-pictures/user6.jpg";
 
 export const navItems = [
-  { label: "Industries", href: "#" },
-  { label: "Services", href: "#" },
-  { label: "Insights", href: "#" },
-  { label: "About us", href: "#" },
-  { label: "Career", href: "#" },
-  { label: "Navigation", href: "#" },
+  { label: "Services", href: "#services" },
+  { label: "Solutions", href: "#solutions" },
+  { label: "About Us", href: "#about" },
+  { label: "Portfolio", href: "#portfolio" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export const testimonials = [
   {
-    user: "John Doe",
-    company: "Stellar Solutions",
+    user: "Sarah Chen",
+    company: "TechFlow Solutions",
     image: user1,
-    text: "I am extremely satisfied with the services provided. The team was responsive, professional, and delivered results beyond my expectations.",
+    text: "Praxox Technologies transformed our business operations with their innovative software solutions. Their team's expertise and dedication exceeded our expectations.",
   },
   {
-    user: "Jane Smith",
-    company: "Blue Horizon Technologies",
+    user: "Marcus Rodriguez",
+    company: "Global Retail Corp",
     image: user2,
-    text: "I couldn't be happier with the outcome of our project. The team's creativity and problem-solving skills were instrumental in bringing our vision to life",
+    text: "The e-commerce platform developed by Praxox Technologies increased our online sales by 300%. Their attention to detail and user experience design is outstanding.",
   },
   {
-    user: "David Johnson",
-    company: "Quantum Innovations",
+    user: "Dr. Emily Watson",
+    company: "HealthTech Innovations",
     image: user3,
-    text: "Working with this company was a pleasure. Their attention to detail and commitment to excellence are commendable. I would highly recommend them to anyone looking for top-notch service.",
+    text: "Praxox Technologies delivered a cutting-edge healthcare management system that streamlined our operations and improved patient care significantly.",
   },
   {
-    user: "Ronee Brown",
-    company: "Fusion Dynamics",
+    user: "James Thompson",
+    company: "FinServ Solutions",
     image: user4,
-    text: "Working with the team at XYZ Company was a game-changer for our project. Their attention to detail and innovative solutions helped us achieve our goals faster than we thought possible. We are grateful for their expertise and professionalism!",
+    text: "Their cybersecurity implementation and compliance framework helped us achieve regulatory standards while protecting our sensitive financial data.",
   },
   {
-    user: "Michael Wilson",
-    company: "Visionary Creations",
+    user: "Lisa Park",
+    company: "EduTech Pro",
     image: user5,
-    text: "I am amazed by the level of professionalism and dedication shown by the team. They were able to exceed our expectations and deliver outstanding results.",
+    text: "The AI-powered learning platform developed by Praxox Technologies revolutionized our educational content delivery and student engagement.",
   },
   {
-    user: "Emily Davis",
-    company: "Synergy Systems",
+    user: "Robert Kim",
+    company: "Manufacturing Plus",
     image: user6,
-    text: "The team went above and beyond to ensure our project was a success. Their expertise and dedication are unmatched. I look forward to working with them again in the future.",
+    text: "Praxox Technologies' IoT solution optimized our manufacturing processes, reducing costs by 25% and improving efficiency across all facilities.",
   },
 ];
 
 export const features = [
   {
     icon: <BotMessageSquare />,
-    text: "Drag-and-Drop Interface",
+    text: "Custom Software Development",
     description:
-      "Easily design and arrange your VR environments with a user-friendly drag-and-drop interface.",
+      "Tailored software solutions designed to meet your specific business needs and drive digital transformation.",
   },
   {
     icon: <Fingerprint />,
-    text: "Multi-Platform Compatibility",
+    text: "Web & Mobile Applications",
     description:
-      "Build VR applications that run seamlessly across multiple platforms, including mobile, desktop, and VR headsets.",
+      "Responsive web applications and native mobile apps that deliver exceptional user experiences across all devices.",
   },
   {
     icon: <ShieldHalf />,
-    text: "Built-in Templates",
+    text: "Cloud Solutions & DevOps",
     description:
-      "Jumpstart your VR projects with a variety of built-in templates for different types of applications and environments.",
+      "Scalable cloud infrastructure and automated deployment pipelines to optimize your development workflow.",
   },
   {
     icon: <BatteryCharging />,
-    text: "Real-Time Preview",
+    text: "AI & Machine Learning",
     description:
-      "Preview your VR application in real-time as you make changes, allowing for quick iterations and adjustments.",
+      "Intelligent solutions powered by cutting-edge AI and ML technologies to automate and enhance your business processes.",
   },
   {
     icon: <PlugZap />,
-    text: "Collaboration Tools",
+    text: "Digital Transformation",
     description:
-      "Work together with your team in real-time on VR projects, enabling seamless collaboration and idea sharing.",
+      "End-to-end digital transformation services to modernize your business operations and improve efficiency.",
   },
   {
     icon: <GlobeLock />,
-    text: "Analytics Dashboard",
+    text: "Cybersecurity & Compliance",
     description:
-      "Gain valuable insights into user interactions and behavior within your VR applications with an integrated analytics dashboard.",
+      "Robust security solutions and compliance frameworks to protect your data and ensure regulatory adherence.",
   },
 ];
 
 export const checklistItems = [
   {
-    title: "Code merge made easy",
+    title: "Strategic Planning & Analysis",
     description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
+      "We begin with a comprehensive analysis of your business requirements and create a strategic roadmap for your digital transformation journey.",
   },
   {
-    title: "Review code without worry",
+    title: "Agile Development Process",
     description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
+      "Our iterative development approach ensures rapid delivery, continuous feedback, and the ability to adapt to changing requirements.",
   },
   {
-    title: "AI Assistance to reduce time",
+    title: "Quality Assurance & Testing",
     description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
+      "Rigorous testing protocols and quality assurance processes ensure your solutions are robust, secure, and perform flawlessly.",
   },
   {
-    title: "Share work in minutes",
+    title: "Deployment & Support",
     description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
+      "Seamless deployment with ongoing support, maintenance, and optimization to ensure your solutions continue to deliver value.",
   },
 ];
 
 export const pricingOptions = [
   {
-    title: "Free",
-    price: "$0",
+    title: "Starter",
+    price: "Custom",
     features: [
-      "Private board sharing",
-      "5 Gb Storage",
-      "Web Analytics",
-      "Private Mode",
+      "Basic web application",
+      "Responsive design",
+      "Basic SEO optimization",
+      "3 months support",
     ],
   },
   {
-    title: "Pro",
-    price: "$10",
+    title: "Professional",
+    price: "Custom",
     features: [
-      "Private board sharing",
-      "10 Gb Storage",
-      "Web Analytics (Advance)",
-      "Private Mode",
+      "Full-stack development",
+      "Database integration",
+      "API development",
+      "6 months support",
     ],
   },
   {
     title: "Enterprise",
-    price: "$200",
+    price: "Custom",
     features: [
-      "Private board sharing",
-      "Unlimited Storage",
-      "High Performance Network",
-      "Private Mode",
+      "Custom enterprise solution",
+      "Scalable architecture",
+      "24/7 support",
+      "Ongoing maintenance",
     ],
   },
 ];
 
 export const resourcesLinks = [
-  { href: "#", text: "Getting Started" },
-  { href: "#", text: "Documentation" },
-  { href: "#", text: "Tutorials" },
-  { href: "#", text: "API Reference" },
-  { href: "#", text: "Community Forums" },
+  { href: "#", text: "Case Studies" },
+  { href: "#", text: "White Papers" },
+  { href: "#", text: "Blog" },
+  { href: "#", text: "Webinars" },
+  { href: "#", text: "Knowledge Base" },
 ];
 
 export const platformLinks = [
-  { href: "#", text: "Features" },
-  { href: "#", text: "Supported Devices" },
-  { href: "#", text: "System Requirements" },
-  { href: "#", text: "Downloads" },
-  { href: "#", text: "Release Notes" },
+  { href: "#", text: "Services" },
+  { href: "#", text: "Technologies" },
+  { href: "#", text: "Industries" },
+  { href: "#", text: "Portfolio" },
+  { href: "#", text: "Careers" },
 ];
 
 export const communityLinks = [
-  { href: "#", text: "Events" },
-  { href: "#", text: "Meetups" },
-  { href: "#", text: "Conferences" },
-  { href: "#", text: "Hackathons" },
-  { href: "#", text: "Jobs" },
+  { href: "#", text: "About Us" },
+  { href: "#", text: "Team" },
+  { href: "#", text: "Contact" },
+  { href: "#", text: "Partners" },
+  { href: "#", text: "News" },
 ];
