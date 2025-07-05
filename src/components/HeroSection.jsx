@@ -1,16 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import video1 from "../assets/video1.mp4";
 import video2 from "../assets/video2.mp4";
-import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const ANIMATION_DURATION = 600;
+const ANIMATION_DURATION = 800; // Increased for smoother animation
 
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [direction, setDirection] = useState(null); // 'next' or 'prev'
-  const autoPlayRef = useRef(null);
 
   const cards = [
     {
@@ -65,53 +63,42 @@ const HeroSection = () => {
     }
   ];
 
-  // Auto-play
-  useEffect(() => {
-    if (isAutoPlaying) {
-      autoPlayRef.current = setInterval(() => {
-        handleNext();
-      }, 5000);
-    } else {
-      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
-    }
-    return () => {
-      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
-    };
-  }, [isAutoPlaying, currentIndex]);
+
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (e.key === 'ArrowLeft') handlePrev();
       else if (e.key === 'ArrowRight') handleNext();
-      else if (e.key === ' ') {
-        e.preventDefault();
-        setIsAutoPlaying((v) => !v);
-      }
     };
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isAutoPlaying, isTransitioning]);
+  }, [isTransitioning]);
 
   const handleNext = () => {
     if (isTransitioning) return;
     setDirection('next');
     setIsTransitioning(true);
+    
+    // Add a small delay for better visual feedback
     setTimeout(() => {
       setCurrentIndex((prev) => (prev + 1) % cards.length);
       setIsTransitioning(false);
       setDirection(null);
-    }, ANIMATION_DURATION);
+    }, ANIMATION_DURATION + 100);
   };
+  
   const handlePrev = () => {
     if (isTransitioning) return;
     setDirection('prev');
     setIsTransitioning(true);
+    
+    // Add a small delay for better visual feedback
     setTimeout(() => {
       setCurrentIndex((prev) => (prev - 1 + cards.length) % cards.length);
       setIsTransitioning(false);
       setDirection(null);
-    }, ANIMATION_DURATION);
+    }, ANIMATION_DURATION + 100);
   };
   const goToCard = (idx) => {
     if (isTransitioning || idx === currentIndex) return;
@@ -124,84 +111,211 @@ const HeroSection = () => {
     }, ANIMATION_DURATION);
   };
 
-  // Animation classes
+  // Enhanced animation classes
   function getCardClass(type) {
-    // type: 'main' or 'next'
-    if (!direction) return type === 'main' ? 'hero-main' : 'hero-next';
+    if (!direction) return type === 'main' ? 'hero-main' : '';
     if (direction === 'next' || direction === 'prev') {
-      if (type === 'main') return 'hero-main hero-main-exit-true';
-      if (type === 'next') return 'hero-next hero-next-enter-true';
+      if (type === 'main') return `hero-main hero-main-exit-${direction}`;
     }
     return '';
   }
 
   const getCurrentCard = () => cards[currentIndex];
-  const getNextCard = () => cards[(currentIndex + 1) % cards.length];
-  const getPrevCard = () => cards[(currentIndex - 1 + cards.length) % cards.length];
-
-  // For prev, show previous card as the 'next' card
-  const nextCard = direction === 'prev' ? getPrevCard() : getNextCard();
 
   return (
-    <div className="flex flex-col w-full relative min-h-[700px]">
+    <div className="flex flex-col w-full relative min-h-[800px]">
       <style>{`
         .hero-main {
           position: absolute;
           left: 0; top: 0; bottom: 0;
-          width: 65%;
+          width: 100%;
           z-index: 2;
-          transform: translateX(0) scale(1);
+          transform: translateX(0) scale(1) rotateY(0deg);
           opacity: 1;
-          transition: transform ${ANIMATION_DURATION}ms cubic-bezier(.7,.2,.2,1), opacity ${ANIMATION_DURATION}ms;
+          transition: all ${ANIMATION_DURATION}ms cubic-bezier(0.34, 1.56, 0.64, 1);
+          filter: brightness(1) contrast(1);
+        }
+        /* Exit animation for next direction (slide left) */
+        .hero-main-exit-next {
+          transform: translateX(-100%) scale(0.7) rotateY(-20deg) translateY(-20px);
+          opacity: 0;
+          z-index: 1;
+          filter: brightness(0.5) contrast(0.7);
+        }
+        /* Exit animation for prev direction (slide right) */
+        .hero-main-exit-prev {
+          transform: translateX(100%) scale(0.7) rotateY(20deg) translateY(-20px);
+          opacity: 0;
+          z-index: 1;
+          filter: brightness(0.5) contrast(0.7);
         }
         .hero-next {
           position: absolute;
           right: 0; top: 40px; bottom: 40px;
-          width: 28%;
+          width: 20%;
           z-index: 1;
-          transform: translateX(0) scale(0.85);
-          opacity: 0.85;
-          transition: transform ${ANIMATION_DURATION}ms cubic-bezier(.7,.2,.2,1), opacity ${ANIMATION_DURATION}ms;
+          transform: translateX(0) scale(0.85) rotateY(5deg);
+          opacity: 0.7;
+          transition: all ${ANIMATION_DURATION}ms cubic-bezier(0.34, 1.56, 0.64, 1);
+          filter: brightness(0.8) contrast(0.9);
         }
-        /* Main card always moves left and fades out */
-        .hero-main-exit-true {
-          transform: translateX(-40%) scale(0.7);
-          opacity: 0;
-          z-index: 1;
-        }
-        /* Incoming card always comes from right, grows, and fades in */
+
+        /* Enhanced enter animation with 3D effect */
         .hero-next-enter-true {
-          transform: translateX(-65vw) scale(1);
+          transform: translateX(-75%) scale(1.05) rotateY(0deg) translateY(0px);
           opacity: 1;
           z-index: 2;
+          filter: brightness(1.1) contrast(1.1);
         }
         .hero-anim-wrapper {
           position: relative;
-          width: 100vw;
-          min-height: 540px;
-          height: 540px;
-          max-width: 100vw;
+          width: 100%;
+          min-height: 640px;
+          height: 640px;
+          max-width: 1400px;
+          margin: 0 auto;
+          perspective: 1000px;
+        }
+        @media (min-width: 1536px) {
+          .hero-anim-wrapper {
+            min-height: 720px;
+            height: 720px;
+            max-width: 1600px;
+          }
+        }
+        @media (min-width: 1920px) {
+          .hero-anim-wrapper {
+            min-height: 800px;
+            height: 800px;
+            max-width: 1800px;
+          }
+        }
+        /* Enhanced card hover effects */
+        .hero-card {
+          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transform-style: preserve-3d;
+          will-change: transform;
+        }
+        .hero-card:hover {
+          transform: translateY(-8px) scale(1.03) rotateY(2deg);
+          box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
+        }
+        /* Enhanced media hover effects */
+        .hero-media {
+          transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          will-change: transform;
+        }
+        .hero-card:hover .hero-media {
+          transform: scale(1.08) rotateZ(1deg);
+        }
+        /* Enhanced progress indicators */
+        .progress-dot {
+          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          position: relative;
+          will-change: transform;
+        }
+        .progress-dot::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 0;
+          height: 0;
+          background: radial-gradient(circle, rgba(251, 146, 60, 0.3) 0%, transparent 70%);
+          border-radius: 50%;
+          transition: all 0.4s ease;
+        }
+        .progress-dot:hover::before {
+          width: 28px;
+          height: 28px;
+        }
+        .progress-dot.active::before {
+          width: 36px;
+          height: 36px;
+          background: radial-gradient(circle, rgba(251, 146, 60, 0.5) 0%, transparent 70%);
+        }
+        .progress-dot:hover {
+          transform: scale(1.2);
+        }
+        /* Enhanced navigation buttons */
+        .nav-btn {
+          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          backdrop-filter: blur(10px);
+          will-change: transform;
+        }
+        .nav-btn:hover {
+          transform: scale(1.15) translateY(-3px) rotateY(5deg);
+          box-shadow: 0 15px 35px -10px rgba(251, 146, 60, 0.5);
+        }
+        .nav-btn:active {
+          transform: scale(0.95) translateY(0px) rotateY(0deg);
+          transition: all 0.1s ease;
+        }
+        /* Card transition overlay effect */
+        .card-transition-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: transparent;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s ease;
+          z-index: 10;
+        }
+        .card-transition-overlay.active {
+          opacity: 0;
+        }
+        /* Enhanced floating animation for overlay text */
+        @keyframes float {
+          0%, 100% { 
+            transform: translateY(0px) rotateZ(0deg); 
+            filter: brightness(1);
+          }
+          50% { 
+            transform: translateY(-12px) rotateZ(0.5deg); 
+            filter: brightness(1.1);
+          }
+        }
+        .floating-text {
+          animation: float 8s ease-in-out infinite;
+          will-change: transform;
+        }
+        /* Enhanced pulse animation for play button */
+        @keyframes pulse-glow {
+          0%, 100% { 
+            box-shadow: 0 0 25px rgba(251, 146, 60, 0.4);
+            transform: scale(1) rotateZ(0deg);
+          }
+          50% { 
+            box-shadow: 0 0 40px rgba(251, 146, 60, 0.7);
+            transform: scale(1.08) rotateZ(2deg);
+          }
+        }
+        .pulse-glow {
+          animation: pulse-glow 3s ease-in-out infinite;
+          will-change: transform;
         }
       `}</style>
-      {/* Heading */}
-      <div className="w-full ml-8 mt-4 mb-8">
-        <h1 className="text-left text-4xl md:text-7xl font-serif text-[#c0390b] leading-tight">
+      {/* Heading with enhanced animation */}
+      <div className="w-full pt-2 mb-8 max-w-7xl mx-auto px-4">
+        <h1 className="text-left text-4xl md:text-7xl lg:text-8xl font-serif text-[#c0390b] leading-tight transition-all duration-700 hover:scale-105">
           Technology that matters
         </h1>
       </div>
       {/* Animated Cards */}
-      <div className="hero-anim-wrapper">
-        {/* Main Card (left) */}
+      <div className="hero-anim-wrapper relative">
+        {/* Transition Overlay */}
+        <div className={`card-transition-overlay ${isTransitioning ? 'active' : ''}`}></div>
+        {/* Main Card */}
         <div className={getCardClass('main')}>
           {renderCard(getCurrentCard(), true)}
         </div>
-        {/* Next Card (right, small) */}
-        <div className={getCardClass('next')}>
-          {renderCard(nextCard, false)}
-        </div>
       </div>
-      {/* Progress Indicators - centered below cards */}
-      <div className="w-full flex justify-center mt-8 gap-3 z-10">
+      {/* Enhanced Progress Indicators */}
+      <div className="w-full flex justify-center mt-8 gap-4 z-10 max-w-7xl mx-auto px-4">
         {cards.map((_, index) => (
           <button
             key={index}
@@ -209,85 +323,73 @@ const HeroSection = () => {
             disabled={isTransitioning}
             className="group relative disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <div className={`w-4 h-4 rounded-full transition-all duration-300 ${
+            <div className={`progress-dot w-4 h-4 rounded-full transition-all duration-500 ${
               index === currentIndex 
-                ? 'bg-orange-500 scale-125' 
+                ? 'active bg-orange-500 scale-125' 
                 : 'bg-gray-300 hover:bg-gray-400'
             }`} />
-            <div className={`absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap`}>
+            <div className={`absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap backdrop-blur-sm border border-gray-700 shadow-lg`}>
               {cards[index].title}
             </div>
           </button>
         ))}
       </div>
-      {/* Navigation Controls */}
-      <div className="absolute right-8 bottom-8 flex flex-row gap-4 z-10">
+      {/* Enhanced Navigation Controls */}
+      <div className="absolute right-8 bottom-8 flex flex-row gap-4 z-10 max-w-7xl mx-auto left-8">
         <button 
           onClick={handlePrev}
           disabled={isTransitioning}
-          className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border-2 border-orange-500 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-300 transform hover:scale-110 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="nav-btn group w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm border-2 border-orange-500 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         >
-          <ChevronLeft size={20} />
+          <ChevronLeft size={24} className="transition-transform duration-200 group-hover:translate-x-[-2px]" />
         </button>
         <button 
           onClick={handleNext}
           disabled={isTransitioning}
-          className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border-2 border-orange-500 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-300 transform hover:scale-110 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="nav-btn group w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm border-2 border-orange-500 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={24} className="transition-transform duration-200 group-hover:translate-x-[2px]" />
         </button>
       </div>
-      {/* Auto-play indicator */}
-      <div className="absolute top-8 right-8 flex items-center gap-2 text-sm text-gray-600">
-        <div className={`w-2 h-2 rounded-full ${isAutoPlaying ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
-        <span>{isAutoPlaying ? 'Auto-playing' : 'Paused'}</span>
-      </div>
+
     </div>
   );
 
   function renderCard(card, isMain) {
     return (
       <div
-        className={`bg-white rounded-2xl shadow-2xl p-6 flex flex-col h-full w-full transition-all duration-700 ease-out ${isMain ? '' : ''}`}
+        className={`hero-card bg-white rounded-2xl shadow-2xl p-6 flex flex-col h-full w-full transition-all duration-700 ease-out`}
         style={{
           background: `linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.98))`,
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255,255,255,0.2)'
         }}
       >
-        {/* Category Badge */}
+        {/* Category Badge with enhanced styling */}
         <div className="flex items-center justify-between mb-4">
-          <span className="text-xs bg-gradient-to-r from-orange-500 to-orange-600 text-white px-3 py-1 rounded-full font-semibold uppercase tracking-wide">
+          <span className="text-xs bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-full font-semibold uppercase tracking-wide shadow-lg transition-all duration-300 hover:scale-105">
             {card.category}
           </span>
-          {isMain && (
-            <button 
-              onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-            >
-              {isAutoPlaying ? <Pause size={16} /> : <Play size={16} />}
-            </button>
-          )}
         </div>
-        {/* Title */}
+        {/* Title with enhanced styling */}
         <div className="flex justify-between items-start mb-4">
-          <h3 className={`font-bold text-gray-800 ${isMain ? 'text-xl' : 'text-sm'} leading-tight`}>
+          <h3 className={`font-bold text-gray-800 ${isMain ? 'text-xl' : 'text-sm'} leading-tight transition-all duration-300 hover:text-orange-600`}>
             {card.title}
           </h3>
           {isMain && (
-            <button className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300">
+            <button className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform hover:-translate-y-1">
               Read more
             </button>
           )}
         </div>
-        {/* Media Container */}
+        {/* Enhanced Media Container */}
         <div className="relative flex-1 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
           {card.type === "video" ? (
             <video
               autoPlay
               loop
               muted
-              className="w-full h-full object-cover"
+              className="hero-media w-full h-full object-cover"
             >
               <source src={card.video} type="video/mp4" />
             </video>
@@ -295,27 +397,27 @@ const HeroSection = () => {
             <img 
               src={card.image} 
               alt={card.title} 
-              className="w-full h-full object-cover transition-transform duration-700" 
+              className="hero-media w-full h-full object-cover transition-transform duration-700" 
             />
           )}
-          {/* Gradient Overlay */}
-          <div className={`absolute inset-0 bg-gradient-to-t from-${card.gradient} opacity-20`}></div>
+          {/* Enhanced Gradient Overlay */}
+          <div className={`absolute inset-0 bg-gradient-to-t from-${card.gradient} opacity-30 transition-opacity duration-500`}></div>
           {isMain && (
             <>
-              {/* Play Button Overlay for videos */}
+              {/* Enhanced Play Button Overlay for videos */}
               {card.type === "video" && (
-                <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-90 rounded-full p-4 border-2 border-orange-500 flex items-center justify-center transition-all duration-300 shadow-lg">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <button className="pulse-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-95 rounded-full p-5 border-2 border-orange-500 flex items-center justify-center transition-all duration-300 shadow-xl hover:scale-110">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" className="text-orange-500">
                     <polygon points="6 4 20 12 6 20 6 4"></polygon>
                   </svg>
                 </button>
               )}
-              {/* Overlay Text */}
+              {/* Enhanced Overlay Text with floating animation */}
               <div className="absolute bottom-6 left-6 right-6">
-                <div className="text-4xl md:text-5xl font-bold text-white drop-shadow-2xl">
+                <div className="floating-text text-4xl md:text-5xl font-bold text-white drop-shadow-2xl transition-all duration-500">
                   {card.overlayText}
                 </div>
-                <p className="text-white/90 text-lg mt-2 drop-shadow-lg">
+                <p className="text-white/90 text-lg mt-2 drop-shadow-lg transition-all duration-500 delay-100">
                   {card.description}
                 </p>
               </div>
