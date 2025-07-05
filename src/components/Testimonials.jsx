@@ -48,7 +48,7 @@ const Testimonials = () => {
       {/* Background decoration */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]"></div>
       
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="w-full px-8 relative z-10">
         {/* Header Section */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-800 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
@@ -64,7 +64,7 @@ const Testimonials = () => {
         </div>
 
         {/* Testimonials Carousel */}
-        <div className="flex items-center justify-center px-4 w-full">
+        <div className="flex items-center justify-center w-full">
           <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 flex-1 transition-transform duration-300 ${animationClass}`}>
             {testimonials.slice(startIdx, startIdx + CARDS_TO_SHOW).map((testimonial, index) => (
               <div

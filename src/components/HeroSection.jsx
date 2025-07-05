@@ -123,12 +123,13 @@ const HeroSection = () => {
   const getCurrentCard = () => cards[currentIndex];
 
   return (
-    <div className="flex flex-col w-full relative min-h-[800px]">
+    <div className="flex flex-col w-full relative min-h-screen">
       <style>{`
         .hero-main {
           position: absolute;
           left: 0; top: 0; bottom: 0;
           width: 100%;
+          max-width: none;
           z-index: 2;
           transform: translateX(0) scale(1) rotateY(0deg);
           opacity: 1;
@@ -152,7 +153,8 @@ const HeroSection = () => {
         .hero-next {
           position: absolute;
           right: 0; top: 40px; bottom: 40px;
-          width: 20%;
+          width: 35%;
+          max-width: none;
           z-index: 1;
           transform: translateX(0) scale(0.85) rotateY(5deg);
           opacity: 0.7;
@@ -162,7 +164,7 @@ const HeroSection = () => {
 
         /* Enhanced enter animation with 3D effect */
         .hero-next-enter-true {
-          transform: translateX(-75%) scale(1.05) rotateY(0deg) translateY(0px);
+          transform: translateX(-90%) scale(1.05) rotateY(0deg) translateY(0px);
           opacity: 1;
           z-index: 2;
           filter: brightness(1.1) contrast(1.1);
@@ -170,24 +172,30 @@ const HeroSection = () => {
         .hero-anim-wrapper {
           position: relative;
           width: 100%;
-          min-height: 640px;
-          height: 640px;
-          max-width: 1400px;
-          margin: 0 auto;
+          min-height: 60vh;
+          height: 60vh;
           perspective: 1000px;
+          padding: 0 0.5rem;
+        }
+        @media (min-width: 768px) {
+          .hero-anim-wrapper {
+            min-height: 70vh;
+            height: 70vh;
+            padding: 0 1rem;
+          }
+        }
+        @media (min-width: 1024px) {
+          .hero-anim-wrapper {
+            min-height: 75vh;
+            height: 75vh;
+            padding: 0 1.5rem;
+          }
         }
         @media (min-width: 1536px) {
           .hero-anim-wrapper {
-            min-height: 720px;
-            height: 720px;
-            max-width: 1600px;
-          }
-        }
-        @media (min-width: 1920px) {
-          .hero-anim-wrapper {
-            min-height: 800px;
-            height: 800px;
-            max-width: 1800px;
+            min-height: 80vh;
+            height: 80vh;
+            padding: 0 2rem;
           }
         }
         /* Enhanced card hover effects */
@@ -300,9 +308,9 @@ const HeroSection = () => {
         }
       `}</style>
       {/* Heading with enhanced animation */}
-      <div className="w-full pt-2 mb-8 max-w-7xl mx-auto px-4">
-        <h1 className="text-left text-4xl md:text-7xl lg:text-8xl font-serif text-[#c0390b] leading-tight transition-all duration-700 hover:scale-105">
-          Technology that matters
+      <div className="w-full pt-8 mb-8 px-4">
+        <h1 className="text-left text-4xl md:text-7xl lg:text-8xl font-bold text-orange-500 leading-tight transition-all duration-700 hover:scale-105">
+          Technology that matters.
         </h1>
       </div>
       {/* Animated Cards */}
@@ -313,9 +321,26 @@ const HeroSection = () => {
         <div className={getCardClass('main')}>
           {renderCard(getCurrentCard(), true)}
         </div>
+        {/* Right-side Navigation Controls */}
+        <div className="absolute flex flex-row gap-4 z-20 bottom-8" style={{top: 'unset', right: '-2.5rem'}}>
+          <button 
+            onClick={handlePrev}
+            disabled={isTransitioning}
+            className="nav-btn group w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm border-2 border-orange-500 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          >
+            <span className="text-2xl font-bold">{'<'}</span>
+          </button>
+          <button 
+            onClick={handleNext}
+            disabled={isTransitioning}
+            className="nav-btn group w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm border-2 border-orange-500 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          >
+            <span className="text-2xl font-bold">{'>'}</span>
+          </button>
+        </div>
       </div>
       {/* Enhanced Progress Indicators */}
-      <div className="w-full flex justify-center mt-8 gap-4 z-10 max-w-7xl mx-auto px-4">
+      <div className="w-full flex justify-center mt-8 gap-4 z-10 px-4">
         {cards.map((_, index) => (
           <button
             key={index}
@@ -334,35 +359,20 @@ const HeroSection = () => {
           </button>
         ))}
       </div>
-      {/* Enhanced Navigation Controls */}
-      <div className="absolute right-8 bottom-8 flex flex-row gap-4 z-10 max-w-7xl mx-auto left-8">
-        <button 
-          onClick={handlePrev}
-          disabled={isTransitioning}
-          className="nav-btn group w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm border-2 border-orange-500 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-        >
-          <ChevronLeft size={24} className="transition-transform duration-200 group-hover:translate-x-[-2px]" />
-        </button>
-        <button 
-          onClick={handleNext}
-          disabled={isTransitioning}
-          className="nav-btn group w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm border-2 border-orange-500 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-        >
-          <ChevronRight size={24} className="transition-transform duration-200 group-hover:translate-x-[2px]" />
-        </button>
-      </div>
-
     </div>
   );
 
   function renderCard(card, isMain) {
     return (
       <div
-        className={`hero-card bg-white rounded-2xl shadow-2xl p-6 flex flex-col h-full w-full transition-all duration-700 ease-out`}
+        className={`hero-card bg-white rounded-2xl shadow-2xl p-12 flex flex-col h-full w-full transition-all duration-700 ease-out`}
         style={{
           background: `linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.98))`,
           backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255,255,255,0.2)'
+          border: '1px solid rgba(255,255,255,0.2)',
+          minWidth: '100%',
+          width: '100%',
+          maxWidth: 'none'
         }}
       >
         {/* Category Badge with enhanced styling */}

@@ -71,7 +71,7 @@ const FeatureSection = () => {
           </span>
         </h2>
       </div>
-      <div className="flex items-center justify-center mt-10 lg:mt-20 px-4 w-full max-w-7xl mx-auto">
+      <div className="flex items-center justify-center mt-10 lg:mt-20 px-8 w-full">
         <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 flex-1 transition-transform duration-300 ${animationClass}`}>
           {features.slice(startIdx, startIdx + CARDS_TO_SHOW).map((feature, index) => (
             <div
