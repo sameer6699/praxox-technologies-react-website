@@ -96,6 +96,36 @@ export const features = [
     description:
       "Robust security solutions and compliance frameworks to protect your data and ensure regulatory adherence.",
   },
+  {
+    icon: <BatteryCharging />,
+    text: "IoT & Embedded Systems",
+    description:
+      "Connect, monitor, and control devices with smart IoT solutions for industrial and consumer applications.",
+  },
+  {
+    icon: <PlugZap />,
+    text: "API Integration & Automation",
+    description:
+      "Seamlessly integrate third-party services and automate workflows to boost productivity and connectivity.",
+  },
+  {
+    icon: <ShieldHalf />,
+    text: "IT Consulting & Strategy",
+    description:
+      "Expert guidance to align your technology investments with your business goals for maximum ROI.",
+  },
+  {
+    icon: <GlobeLock />,
+    text: "Blockchain Solutions",
+    description:
+      "Leverage blockchain for secure, transparent, and decentralized business processes and transactions.",
+  },
+  {
+    icon: <BotMessageSquare />,
+    text: "UI/UX Design Services",
+    description:
+      "Create intuitive, engaging, and accessible digital experiences for your users across all platforms.",
+  },
 ];
 
 export const checklistItems = [
